@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useRef } from 'react'
-import { updateUserStart, updateUserSuccess, updateUserFailure } from '../redux/user/userSlice';
+import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserFailure, deleteUserSuccess, deleteUserStart } from '../redux/user/userSlice';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 export default function Profile() {
   const [formData, setFormData] = useState({})
@@ -47,6 +48,32 @@ export default function Profile() {
       toast.error(error.message)
     }
   }
+  const handleDelete = async (e) => {
+    const userid = currentUser.rest._id;
+    try {
+      const res = await fetch(`/api/user/delete/${userid}`,{
+        method: 'DELETE',
+        headers:{
+          'Content-Type': 'application/json',
+        }
+      })
+      const data = await res.json();
+      console.log(data);
+      if(data.success === false){
+        dispatch(deleteUserFailure(data.message));
+        toast.error(data.message);
+        return;
+      }
+      dispatch(deleteUserSuccess(data.message));
+      toast.success(data.message);
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+      toast.error(error.message);
+    }
+  }
+  const handleSignOut = (e) =>{
+
+  }
 
   return (
     <div className='p-3 max-w-lg mx-auto'>
@@ -63,13 +90,15 @@ export default function Profile() {
           <input type="email" placeholder='email' defaultValue={currentUser.rest.email} className='border p-3 rounded-lg' id='email' onChange={handleChange}/>
           <input type="tel" placeholder='Phone' defaultValue={currentUser.rest.PhoneNumber} className='border p-3 rounded-lg' id='PhoneNumber' onChange={handleChange}/>
           <input type="password" placeholder='password' className='border p-3 rounded-lg' id='password' onChange={handleChange}/>
-          <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-90'>update</button>
+          <button disabled={loading} className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-90'>{loading? 'Loading...' : 'Update'}</button>
         </form>
         <div className='flex justify-between mt-5'>
-          <span className='bg-red-700 shadow-lg rounded p-1 hover:bg-red-950 text-white border border-black'>
-            Delete Account
-          </span>
-          <span className='text-red-700 cursor-pointer hover:underline'>
+          <Link to={'/sign-in'}>
+            <span onClick={handleDelete} className='bg-red-700 shadow-lg rounded p-1 hover:bg-red-950 text-white border border-black'>
+              Delete Account
+            </span>
+          </Link>
+          <span onClick={handleSignOut} className='text-red-700 cursor-pointer hover:underline'>
             Sign out 
           </span>
         </div>

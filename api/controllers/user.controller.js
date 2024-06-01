@@ -38,17 +38,12 @@ export const updateUser = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
+  if (req.user.id !== req.params.id) return next(errorHandler(401, 'You can only delete your own account!'));
   try {
     const userToDelete = await User.findById(req.params.id);
-    
-    // Check if the user making the request is the user to be deleted or an admin
-    if (!(req.user.id === req.params.id || req.user.isAdmin)) {
-      return next(errorHandler(401, 'You are not authorized to delete this user!'));
-    }
-    
     await User.findByIdAndDelete(req.params.id);
     res.clearCookie('access_token');
-    res.status(200).json('User has been deleted!');
+    res.status(200).json({message:'User has been deleted!'});
   } catch (error) {
     next(error);
   }
