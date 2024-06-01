@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useRef } from 'react'
-import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserFailure, deleteUserSuccess, deleteUserStart } from '../redux/user/userSlice';
+import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserFailure, deleteUserSuccess, deleteUserStart, signOutStart, signOutSuccess, signOutFailure } from '../redux/user/userSlice';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
@@ -51,6 +51,7 @@ export default function Profile() {
   const handleDelete = async (e) => {
     const userid = currentUser.rest._id;
     try {
+      dispatch(deleteUserStart());
       const res = await fetch(`/api/user/delete/${userid}`,{
         method: 'DELETE',
         headers:{
@@ -71,8 +72,22 @@ export default function Profile() {
       toast.error(error.message);
     }
   }
-  const handleSignOut = (e) =>{
-
+  const handleSignOut = async (e) =>{
+    try {
+      dispatch(signOutStart());
+      const res = await fetch('/api/auth/signout');
+      const data = await res.json();
+      if(data.success === false){
+        dispatch(signOutFailure(data.message));
+        toast.error(data.message);
+        return
+      }
+      dispatch(signOutSuccess(data.message));
+      toast.success(data.message);
+    } catch (error) {
+      dispatch(signOutFailure(error.message));
+      toast.error(error.message);
+    }
   }
 
   return (

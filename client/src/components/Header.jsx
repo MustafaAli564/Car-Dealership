@@ -26,13 +26,13 @@ export default function Header() {
             <Link to={'/about'}>
                 <li className='p-1 font-medium hover:underline'>About</li>
             </Link>
-            <Link to={'/sign-in'}>
-                {currentUser === null || !currentUser.rest || !currentUser.rest.avatar ? (
+            <Link to={currentUser === null || !currentUser.rest || !currentUser.rest.avatar ? '/sign-in' : '/profile'}>
+    {           currentUser === null || !currentUser.rest || !currentUser.rest.avatar ? (
                     <li className='bg-green-700 shadow-lg rounded p-1 hover:bg-green-950'>Signin/Signup</li>
                 ) : (
                     <img className='rounded-full max-h-9 max-w-9' src={currentUser.rest.avatar} alt='profile' />
                 )}
-             </Link>
+            </Link>
         </ul>
     </header>
   )
