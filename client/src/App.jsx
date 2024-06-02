@@ -22,7 +22,6 @@ export default function App() {
         <Route path="/profile" element={<Profile/>}/>       
         <Route path="/create-listing" element={<CreateListing/>}/>
       </Route>
-      
     </Routes>
     <ToastContainer position="bottom-right" autoClose={2000} closeOnClick/>
   </BrowserRouter>
