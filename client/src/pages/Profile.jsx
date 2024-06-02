@@ -105,7 +105,10 @@ export default function Profile() {
           <input type="email" placeholder='email' defaultValue={currentUser.rest.email} className='border p-3 rounded-lg' id='email' onChange={handleChange}/>
           <input type="tel" placeholder='Phone' defaultValue={currentUser.rest.PhoneNumber} className='border p-3 rounded-lg' id='PhoneNumber' onChange={handleChange}/>
           <input type="password" placeholder='password' className='border p-3 rounded-lg' id='password' onChange={handleChange}/>
-          <button disabled={loading} className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-90'>{loading? 'Loading...' : 'Update'}</button>
+          <button disabled={loading} className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-90 my-2'>{loading? 'Loading...' : 'Update'}</button>
+          <Link className='uppercase bg-green-500 text-black p-3 rounded-lg hover:opacity-90 text-center my-2'to={'/create-listing'}>
+            Create Listing
+          </Link>
         </form>
         <div className='flex justify-between mt-5'>
           <Link to={'/sign-in'}>

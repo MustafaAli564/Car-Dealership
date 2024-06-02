@@ -89,11 +89,12 @@ export const updateListing = async (req, res) => {
   export const searchListings = async (req, res) => {
 
     try {
-      const { city, state, make, model, year } = req.query;
+      const { location, make, model, year } = req.query;
 
       const query = {};
-      if (city) query['Listing_info.Location.city'] = city;
-      if (state) query['Listing_info.Location.state'] = state;
+      // if (city) query['Listing_info.Location.city'] = city;
+      // if (state) query['Listing_info.Location.state'] = state;
+      if(location) query['Listing_info.Location'] = location
       if (make) query['Car_info.Make'] = make;
       if (model) query['Car_info.Model'] = model;
       if (year) query['Car_info.Year'] = year;

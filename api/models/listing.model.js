@@ -27,16 +27,7 @@ const ListingInfoSchema = new mongoose.Schema(
    },
 
    Location: {
-    type: {
-        city: {
-            type: String,
-            required: true
-        },
-        state: {
-            type: String,
-            required: true
-        }
-    },
+    type: String,
     required: true
     },
 
@@ -51,7 +42,7 @@ const ListingInfoSchema = new mongoose.Schema(
 
 const CarInfoSchema = new mongoose.Schema(
 {
-    Make: {
+      Make: {
         type: String, 
         required : true
        },
@@ -80,7 +71,6 @@ const CarInfoSchema = new mongoose.Schema(
        Mileage: {
         type: Number, 
         required : true
-    
        },
 
        Transmission: {
