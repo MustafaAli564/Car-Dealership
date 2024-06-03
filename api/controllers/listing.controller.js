@@ -4,16 +4,14 @@ import Listing from '../models/listing.model.js';
 
 export const createListing = async (req, res, next) => {
   try {
-    const user = req.user;
-
-    const { Listing_info, Car_info } = req.body; 
+    const { Listing_info, Car_info, user } = req.body; 
     const listing = await Listing.create({
       Listing_info,
       Car_info,
-      user: user._id 
+      user: user
     });
 
-    return res.status(201).json(listing); 
+    return res.status(201).json({listing, message:"Listing Created!"}); 
   } catch (error) {
     next(error); 
   }

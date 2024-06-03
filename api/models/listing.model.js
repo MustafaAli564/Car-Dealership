@@ -4,12 +4,6 @@ import mongoose from 'mongoose'
 const ListingInfoSchema = new mongoose.Schema(
 
 {
-    Id:{
-      type: String,
-      required: true,
-      unique: true  
-    },
-
    Title: {
     type: String, 
     required : true
