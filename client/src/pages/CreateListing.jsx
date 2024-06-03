@@ -19,7 +19,7 @@ export default function CreateListing() {
         }
     });
 
-    // console.log(formData);
+    console.log(formData);
 
     const handleImageSubmit = (e) => {
         if (files.length > 0 && files.length + formData.Listing_info.Photos.length < 5) {
