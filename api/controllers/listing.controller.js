@@ -48,6 +48,61 @@ export const getListing = async (req, res, next) => {
   }
 };
 
+export const getListings = async (req, res, next) => {
+  try {
+    const limit = parseInt(req.query.limit) || 9;
+    const startIndex = parseInt(req.query.startIndex) || 0;
+
+    let Location = req.query.location;
+    if (!Location || Location === 'all') {
+      Location = { $in: ['Miami', 'Houston', 'Chicago', 'Los Angeles', 'New York'] };
+    }
+
+    let Make = req.query.make;
+    if (!Make || Make === 'all') {
+      Make = { $in: ['Honda', 'Toyota', 'Mercedes', 'BMW', 'KIA'] };
+    }
+
+    let Transmission = req.query.transmission;
+    if (!Transmission || Transmission === 'all') {
+      Transmission = {$in: ['Semi-Automatic','CVT','Manual','Automatic']};
+    }
+
+    let fuel = req.query.fuel_type;
+    if(!fuel || fuel === 'all'){
+      fuel = { $in: ['Gasoline', 'Diesel', 'Electric', 'Hybrid', 'Ethanol', 'Biodiesel'] }
+    }
+
+    const minMileage = parseInt(req.query.minMileage) || 0;
+    const maxMileage = parseInt(req.query.maxMileage) || Number.MAX_SAFE_INTEGER;
+
+    const minPrice = parseInt(req.query.minPrice) || 0;
+    const maxPrice = parseInt(req.query.maxPrice) || Number.MAX_SAFE_INTEGER;
+
+    const searchTerm = req.query.searchTerm || '';
+    const sort = req.query.sort || 'createdAt';
+    const order = req.query.order || 'desc';
+
+    const listings = await Listing.find({
+      'Listing_info.Title': { $regex: searchTerm, $options: 'i' },
+      'Listing_info.Location': Location,
+      'Car_info.Make': Make,
+      'Car_info.Transmission': Transmission,
+      'Car_info.Fuel_type': fuel,
+      'Car_info.Mileage': { $gte: minMileage, $lte: maxMileage },
+      'Listing_info.Price': { $gte: minPrice, $lte: maxPrice },
+    }).sort(
+      { [sort]: order }
+    ).limit(limit).skip(startIndex);
+
+    return res.status(200).json(listings);
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
 
 export const updateListing = async (req, res) => {
     try {

@@ -12,6 +12,8 @@ router.delete('/delete/:id', verifyToken, controller.deleteListing);
 
 router.get('/get/:id', controller.getListing)
 
+router.get('/get', controller.getListings)
+
 router.get('/user/:userId', controller.getUserListings);
 
 router.get('/search', controller.searchListings);
