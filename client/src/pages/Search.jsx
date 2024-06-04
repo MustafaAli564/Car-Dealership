@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { TbError404 } from "react-icons/tb";
+import { BsThreeDots } from "react-icons/bs";
+import ListingCard from '../components/ListingCard';
 
 export default function Search() {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [listings, setListings] = useState([]);
+    console.log(listings)
     const [queryData, setQueryData] = useState({
         searchTerm: '',
         location: '',
@@ -95,6 +101,16 @@ export default function Search() {
                 order: urlOrder || 'desc',
             })
         }
+
+        const fetchListings = async () => {
+            setLoading(true);
+            const searchQuery = urlParams.toString();
+            const res = await fetch(`/api/listing/get?${searchQuery}`);
+            const data = await res.json();
+            setListings(data)
+            setLoading(false);
+        };
+        fetchListings();
     }, [location.search]);
 
   return (
@@ -166,7 +182,7 @@ export default function Search() {
                     <label className='font-semibold w-2/4'>Sort: </label>
                     <select onChange={handleChange} className="rounded-lg border w-2/4"name="sort_order" defaultValue={'createdAt_desc'} id="sort_order">
                         <option value='Price_desc'>Price high to low</option>
-                        <option value='Price_asc'>Price low to hight</option>
+                        <option value='Price_asc'>Price low to high</option>
                         <option value='createdAt_desc'>Latest</option>
                         <option value='createdAt_asc'>Oldest</option>
                     </select>
@@ -174,8 +190,21 @@ export default function Search() {
                 <button className='bg-zinc-700 rounded-lg text-white p-2 hover:opacity-90 uppercase'>Search</button>
             </form>
         </div>
-        <div>
+        <div className='w-3/5'>
             <h1 className='text-3xl font-semibold underline text-zinc-700'>Results:</h1>
+            <div className='p-7 gap-4 flex flex-wrap'>
+                {!loading && listings.length === 0 &&(
+                    <div className='flex flex-col items-center mx-auto my-auto'>
+                        <TbError404 className='text-9xl text-center my-52 text-red-500'/>
+                    </div>
+                )}
+                {loading && (
+                    <div className='flex flex-col items-center mx-auto my-auto'> 
+                        <BsThreeDots className='text-9xl text-center my-52 text-red-500'/>
+                    </div>
+                )}
+                {!loading && listings && listings.map((listing) => <ListingCard key={listing._id} listing={listing}/>)}
+            </div>
         </div>
     </div>
   )

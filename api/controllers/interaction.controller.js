@@ -3,8 +3,8 @@ import Listing from '../models/listing.model.js';
 
 export const favListing = async(req, res, next) => {
     try{
-        const user = req.user;
-        const{listingId} = req.body;
+        const{userId, listingId} = req.body;
+        const user = await User.findById(userId)
         if (!user.favourites.includes(listingId)) {
             user.favourites.push(listingId);
             await user.save();
@@ -17,9 +17,8 @@ export const favListing = async(req, res, next) => {
 
 export const unfavouriteListing = async (req, res, next) => {
     try {
-        const user = req.user;
-        const { listingId } = req.body;
-
+        const {userId, listingId } = req.body;
+        const user = await User.findById(userId)
         const index = user.favourites.indexOf(listingId);
         if (index !== -1) {
             user.favourites.splice(index, 1);

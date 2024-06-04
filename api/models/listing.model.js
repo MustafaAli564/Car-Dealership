@@ -31,7 +31,7 @@ const ListingInfoSchema = new mongoose.Schema(
     }],
 
  
-},{ timestamps: true }
+}
 )
 
 const CarInfoSchema = new mongoose.Schema(
@@ -77,7 +77,7 @@ const CarInfoSchema = new mongoose.Schema(
         required : true
        },
    
-} ,{ timestamps: true }
+}
 
 )
 
@@ -92,7 +92,7 @@ const listingSchema = new mongoose.Schema({
   reports: [{
     type: String
   }]
-});
+},{ timestamps: true });
 
 
 const Listing = mongoose.model('Listing', listingSchema);
