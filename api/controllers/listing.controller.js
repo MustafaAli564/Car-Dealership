@@ -1,4 +1,5 @@
 import Listing from '../models/listing.model.js';
+import User from '../models/user.model.js';
 
 
 export const createListing = async (req, res, next) => {

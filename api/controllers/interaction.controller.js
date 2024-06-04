@@ -49,28 +49,3 @@ export const reportListing = async(req, res, next) => {
         res.status(500).json({ message: "Failed to report the listing.", error: error.message });
     }
 }
-
-// export const contactSeller = async (req, res, next) => {
-//     try {
-//         const { listingId } = req.body;
-//         const listing = await Listing.findById(listingId).populate('user', 'phoneNumber');
-//         if (!listing) {
-//             return res.status(404).json({ message: "Listing not found" });
-//         }
-//         const seller = await User.findById(listing.user._id);
-//         if (!seller) {
-//             return res.status(404).json({ message: "Seller not found" });
-//         }
-//         const message = `You have an interested buyer. Contact them at: ${listing.user.PhoneNumber}`;
-        
-//         await sendNotification(seller._id, message);
-
-//         res.status(200).json({ message: "Notification sent to the seller successfully." });
-//     } catch (error) {
-//         next(error);
-//     }
-// };
-
-// async function sendNotification(userId, message) {
-//     console.log(`Notification sent to user ${userId}: ${message}`);
-//  }
