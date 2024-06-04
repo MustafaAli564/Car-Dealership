@@ -53,19 +53,19 @@ export const getListings = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 9;
     const startIndex = parseInt(req.query.startIndex) || 0;
 
-    let Location = req.query.location;
-    if (!Location || Location === 'all') {
-      Location = { $in: ['Miami', 'Houston', 'Chicago', 'Los Angeles', 'New York'] };
+    let location = req.query.location;
+    if (!location || location === 'all') {
+      location = { $in: ['Miami', 'Houston', 'Chicago', 'Los Angeles', 'New York'] };
     }
 
-    let Make = req.query.make;
-    if (!Make || Make === 'all') {
-      Make = { $in: ['Honda', 'Toyota', 'Mercedes', 'BMW', 'KIA'] };
+    let make = req.query.make;
+    if (!make || make === 'all') {
+      make = { $in: ['Honda', 'Toyota', 'Mercedes', 'BMW', 'KIA'] };
     }
 
-    let Transmission = req.query.transmission;
-    if (!Transmission || Transmission === 'all') {
-      Transmission = {$in: ['Semi-Automatic','CVT','Manual','Automatic']};
+    let transmission = req.query.transmission;
+    if (!transmission || transmission === 'all') {
+      transmission = {$in: ['Semi-Automatic','CVT','Manual','Automatic']};
     }
 
     let fuel = req.query.fuel_type;
@@ -73,11 +73,27 @@ export const getListings = async (req, res, next) => {
       fuel = { $in: ['Gasoline', 'Diesel', 'Electric', 'Hybrid', 'Ethanol', 'Biodiesel'] }
     }
 
-    const minMileage = parseInt(req.query.minMileage) || 0;
-    const maxMileage = parseInt(req.query.maxMileage) || Number.MAX_SAFE_INTEGER;
+    // const minMileage = parseInt(req.query.minMileage) || 0;
+    let minMileage = parseInt(req.query.minMileage)
+    if(!minMileage){
+      minMileage = 0;
+    }
+    // const maxMileage = parseInt(req.query.maxMileage) || Number.MAX_SAFE_INTEGER;
+    let maxMileage = parseInt(req.query.maxMileage)
+    if(!maxMileage){
+      maxMileage = Number.MAX_SAFE_INTEGER;
+    }
 
-    const minPrice = parseInt(req.query.minPrice) || 0;
-    const maxPrice = parseInt(req.query.maxPrice) || Number.MAX_SAFE_INTEGER;
+    // const minPrice = parseInt(req.query.minPrice) || 0;
+    let minPrice = parseInt(req.query.minPrice)
+    if(!minPrice){
+      minPrice = 0;
+    }
+    // const maxPrice = parseInt(req.query.maxPrice) || Number.MAX_SAFE_INTEGER;
+    let maxPrice = parseInt(req.query.maxPrice)
+    if(!maxPrice){
+      maxPrice = Number.MAX_SAFE_INTEGER;
+    }
 
     const searchTerm = req.query.searchTerm || '';
     const sort = req.query.sort || 'createdAt';
@@ -85,9 +101,9 @@ export const getListings = async (req, res, next) => {
 
     const listings = await Listing.find({
       'Listing_info.Title': { $regex: searchTerm, $options: 'i' },
-      'Listing_info.Location': Location,
-      'Car_info.Make': Make,
-      'Car_info.Transmission': Transmission,
+      'Listing_info.Location': location,
+      'Car_info.Make': make,
+      'Car_info.Transmission': transmission,
       'Car_info.Fuel_type': fuel,
       'Car_info.Mileage': { $gte: minMileage, $lte: maxMileage },
       'Listing_info.Price': { $gte: minPrice, $lte: maxPrice },
