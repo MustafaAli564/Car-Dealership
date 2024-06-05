@@ -13,11 +13,29 @@ export default function Profile() {
   const fileRef = useRef(null);
   const dispatch = useDispatch();
   const[file, setFile] = useState(undefined);
+  const[userListings, setUserListings] = useState();
+  const[showListingsError, setShowListingsError] = useState(false);
   const[perc, setPerc] = useState(0);
   const[uploadError, setUploadError] = useState(false);
-  console.log(formData);
-  console.log(perc);
-  console.log(uploadError);
+  // console.log(formData);
+  // console.log(perc);
+  // console.log(uploadError);
+  console.log(userListings);
+  const handleShowListings = async (e) => {
+    try {
+      setShowListingsError(false);
+      const res = await fetch(`/api/user/listings/${currentUser.rest._id}`);
+      const data = await res.json();
+      if (data.success === false) {
+        setShowListingsError(true);
+        return;
+      }
+
+      setUserListings(data);
+    } catch (error) {
+      setShowListingsError(true);
+    }
+  }
 
   useEffect(() => {
     if(file){
@@ -128,6 +146,24 @@ export default function Profile() {
       toast.error(error.message);
     }
   }
+  const handleListingDelete = async (listingId) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+
+      setUserListings((prev) =>
+        prev.filter((listing) => listing._id !== listingId)
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <div className='p-3 max-w-lg mx-auto'>
@@ -174,6 +210,33 @@ export default function Profile() {
             Sign out 
           </span>
         </div>
+        <button onClick={handleShowListings} className='text-green-700 w-full hover:underline'>
+          Show Listings
+        </button>
+        {userListings && userListings.length > 0 && userListings.map((listing) => (
+          <div className='flex flex-row gap-4 border rounded-lg border-zinc-700 p-1 bg-white' key={listing._id}>
+              <Link to={`/listing/${listing._id}`}>
+                <img className="rounded-full h-16 w-16 object-contain" src={listing.Listing_info.Photos[0]} alt="No Image" />
+              </Link>
+              <Link
+                className='text-slate-700 font-semibold  hover:underline truncate flex-1'
+                to={`/listing/${listing._id}`}
+              >
+                <p className='w-full text-center my-5'>{listing.Listing_info.Title}</p>
+              </Link>
+              <div className='flex flex-col item-center'>
+                <button
+                  onClick={() => handleListingDelete(listing._id)}
+                  className='text-red-700 uppercase hover:underline'
+                >
+                  Delete
+                </button>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className='text-green-700 uppercase hover:underline'>Edit</button>
+                </Link>
+              </div>
+          </div>
+        ))}
     </div>
   )
 }
