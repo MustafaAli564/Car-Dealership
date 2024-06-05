@@ -4,12 +4,17 @@ import Listing from '../models/listing.model.js';
 export const favListing = async(req, res, next) => {
     try{
         const{userId, listingId} = req.body;
-        const user = await User.findById(userId)
-        if (!user.favourites.includes(listingId)) {
+        const user = await User.findById(userId);
+        const index = user.favourites.indexOf(listingId);
+        if (index === -1) {
             user.favourites.push(listingId);
             await user.save();
-        }
-        return res.status(201).json({ listingId, message: "Listing added to favorites" });
+            return res.status(201).json({ user, message: "Listing Added to favorites" });
+        } else {
+            user.favourites.splice(index, 1);
+            await user.save();
+            return res.status(201).json({ user, message: "Listing Removed From favorites" });
+        }  
     }catch (error) {
         next(error); 
     }
