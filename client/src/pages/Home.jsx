@@ -22,7 +22,7 @@ export default function Home() {
               <img
                   src={car1}
                   alt="Car 1"
-                  className="rounded-lg h-full w-full object-cover mx-auto"
+                  className="rounded-lg h-full w-full object-cover mx-auto hover:scale-105 duration-300"
               />
             </div>
 
@@ -31,14 +31,14 @@ export default function Home() {
                 <img
                     src={car2}
                     alt="Car 2"
-                    className="rounded-lg h-full w-full object-cover mx-auto"
+                    className="rounded-lg h-full w-full object-cover mx-auto hover:scale-105 duration-300"
                 />
               </div>
               <div className="image-card text-center p-4">
                 <img
                     src={car3}
                     alt="Car 3"
-                    className="rounded-lg h-full w-full object-cover mx-auto"
+                    className="rounded-lg h-full w-full object-cover mx-auto hover:scale-105 duration-300"
                 />
               </div>
             </div>
@@ -49,21 +49,21 @@ export default function Home() {
               <img
                   src={car4}
                   alt="Car 4"
-                  className="rounded-lg h-full w-full object-cover mx-auto"
+                  className="rounded-lg h-full w-full object-cover mx-auto hover:scale-105 duration-300"
               />
             </div>
             <div className="image-card text-center p-4">
               <img
                   src={car5}
                   alt="Car 5"
-                  className="rounded-lg h-full w-full object-cover mx-auto"
+                  className="rounded-lg h-full w-full object-cover mx-auto hover:scale-105 duration-300"
               />
             </div>
             <div className="image-card text-center p-4">
               <img
                   src={car6}
                   alt="Car 6"
-                  className="rounded-lg h-full w-full object-cover mx-auto"
+                  className="rounded-lg h-full w-full object-cover mx-auto hover:scale-105 duration-300"
               />
             </div>
           </div>
